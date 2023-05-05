@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
-function App() {
+import AddPrompt from "./components/add-prompt.component";
+import PromptsList from "./components/prompt-list.component";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <div className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <Link to={"/prompts-list"} className="nav-link">
+              See Prompts
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/add-prompt"} className="nav-link">
+              Add Prompt
+            </Link>
+          </li>
+        </div>
+      </nav>
+
+      <div className="container mt-3">
+        <h2>ChatGPT Prompts</h2>
+        <Switch>
+          <Route exact path={["/", "/prompts-list"]} component={PromptsList} />
+          <Route exact path="/add-prompt" component={AddPrompt} />
+        </Switch>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
