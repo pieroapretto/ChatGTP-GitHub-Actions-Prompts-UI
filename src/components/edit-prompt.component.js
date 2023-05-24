@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PromptService from "../services/prompts.service";
+import { useParams } from 'react-router-dom';
 
 const EditPrompt = (props) => {
   const [currentPrompt, setCurrentPrompt] = useState({
@@ -10,9 +11,17 @@ const EditPrompt = (props) => {
   });
   const [message, setMessage] = useState("");
 
+  const { id } = useParams();
+
   useEffect(() => {
-    setCurrentPrompt(props.prompt);
-  }, [props.prompt]);
+    const dbRef = PromptService.getAll().child(id);
+    dbRef.on('value', (snapshot) => {
+      setCurrentPrompt(snapshot.val());
+    });
+
+    // Don't forget to unsubscribe from your realtime subscription on unmount
+    return () => dbRef.off();
+  }, [id]);
 
   const onChangeTitle = (e) => {
     const title = e.target.value;
@@ -72,8 +81,9 @@ const EditPrompt = (props) => {
   };
 
   return (
-    <div>
-      <h4>Edit Prompt</h4>
+    <div className="row">
+      <h2>Edit Prompt</h2>
+      <div className="col-md-12"></div>
       {currentPrompt && (
         <div className="edit-form">
           <form>

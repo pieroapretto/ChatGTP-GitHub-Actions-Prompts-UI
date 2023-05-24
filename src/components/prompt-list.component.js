@@ -1,12 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import PromptService from "../services/prompts.service";
-
-import EditPrompt from "./edit-prompt.component";
+import PromptsListTable from "./prompt-list-table.component";
 
 const PromptsList = () => {
   const [prompts, setPrompts] = useState(false);
-  const [currentPrompt, setCurrentPrompt] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(-1);
 
   useEffect(() => {
     const unsubscribe = PromptService.getAll().on("value", onDataChange);
@@ -29,6 +26,7 @@ const PromptsList = () => {
           title: data.title,
           description: data.description,
           published: data.published,
+          timestamp: data.timestamp
         });
       });
 
@@ -38,62 +36,13 @@ const PromptsList = () => {
     }
   };
 
-  const refreshList = () => {
-    setCurrentPrompt(null);
-    setCurrentIndex(-1);
-  };
-
-  const setActivePrompt = (prompt, index) => {
-    setCurrentPrompt(prompt);
-    setCurrentIndex(index);
-  };
-
-  const removeAllPrompts = () => {
-    PromptService.deleteAll()
-      .then(() => {
-        refreshList();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   return (
-    <div className="list row">
-      <div className="col-md-6">
-        <div className="list-group">
-          {prompts &&
-            prompts.map((prompt, index) => (
-              <button
-                className={
-                  "list-group-item list-group-item-action " + (index === currentIndex ? "active" : "")
-                }
-                onClick={() => setActivePrompt(prompt, index)}
-                key={prompt.key}
-              >
-                {prompt.title}
-              </button>
-            ))}
-            {prompts && (
-              <Fragment>
-                <br/>
-                <button
-                  className="m-3 btn btn-sm btn-outline-danger remove-all-btn"
-                  onClick={removeAllPrompts}
-                >
-                  Delete All Prompts
-                </button>
-              </Fragment>
-          )}
-        </div>
-      </div>
-      <div className="col-md-6">
-        {currentPrompt && (
-          <EditPrompt
-            prompt={currentPrompt}
-            refreshList={refreshList}
-          />
-        )}
+    <div className="row">
+      <h2>Automation Prompts</h2>
+      <div className="col-md-12">
+        <PromptsListTable
+          data={prompts}
+        />
       </div>
     </div>
   );

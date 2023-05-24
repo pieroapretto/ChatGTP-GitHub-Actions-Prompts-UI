@@ -1,6 +1,9 @@
-import firebase from "../firebase";
+import firebase from 'firebase/app';
+import 'firebase/database';
+import fbDatabase from "../firebase";
+import { date_format_mmddyyyy } from '../utils/dates';
 
-const db = firebase.ref("/prompts");
+const db = fbDatabase.ref("/prompts");
 
 class PromptService {
   getAll() {
@@ -8,7 +11,8 @@ class PromptService {
   }
 
   create(prompt) {
-    return db.push(prompt);
+    const timestamp = date_format_mmddyyyy(Date.now());
+    return db.push({ timestamp, ...prompt});
   }
 
   update(key, value) {

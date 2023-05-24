@@ -38,48 +38,54 @@ const AddPrompt = () => {
   };
 
   return (
-    <div className="submit-form">
-      {submitted ? (
-        <div>
-          <h4>You submitted successfully!</h4>
-          <button className="btn btn-success" onClick={newPrompt}>
-            Add
-          </button>
-        </div>
-      ) : (
-        <div>
-          <div className="form-group">
-            <label htmlFor="title">New Prompt</label>
-            <input
-              type="text"
-              className="form-control"
-              id="title"
-              required
-              value={title}
-              onChange={onChangeTitle}
-              name="title"
-            />
-          </div>
+    <div className="row">
+      <h2>Add Prompt</h2>
+      <div className="col-md-12">
+        <div className="submit-form">
+          {submitted ? (
+            <div>
+              <h4>You submitted successfully!</h4>
+              <button className="btn btn-success" onClick={newPrompt}>
+                Add
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div className="form-group">
+                <label htmlFor="title">New Prompt</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="title"
+                  required
+                  value={title}
+                  onChange={onChangeTitle}
+                  name="title"
+                />
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <input
-              type="text"
-              className="form-control"
-              id="description"
-              required
-              value={description}
-              onChange={onChangeDescription}
-              name="description"
-            />
-          </div>
-          <br/>
-          <button onClick={savePrompt} className="btn btn-outline-success">
-            Submit
-          </button>
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="description"
+                  required
+                  value={description}
+                  onChange={onChangeDescription}
+                  name="description"
+                />
+              </div>
+              <br/>
+              <button onClick={savePrompt} className="btn btn-outline-success">
+                Submit
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
+    
   );
 };
 

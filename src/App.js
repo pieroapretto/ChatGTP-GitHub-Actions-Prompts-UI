@@ -5,6 +5,7 @@ import "./App.css";
 
 import AddPrompt from "./components/add-prompt.component";
 import PromptsList from "./components/prompt-list.component";
+import EditPrompt from "./components/edit-prompt.component";
 
 const App = () => {
   return (
@@ -25,10 +26,10 @@ const App = () => {
       </nav>
 
       <div className="container mt-3">
-        <h2>ChatGPT Prompts</h2>
         <Switch>
           <Route exact path={["/", "/prompts-list"]} component={PromptsList} />
           <Route exact path="/add-prompt" component={AddPrompt} />
+          <Route path="/edit-prompt/:id" component={EditPrompt} />
         </Switch>
       </div>
     </div>
