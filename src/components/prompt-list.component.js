@@ -21,12 +21,16 @@ const PromptsList = () => {
       items.forEach((item) => {
         let key = item.key;
         let data = item.val();
+
         prompts.push({
           key: key,
           title: data.title,
           description: data.description,
-          published: data.published,
-          timestamp: data.timestamp
+          active: data.active,
+          timestamp: data.timestamp,
+          platform: data.platform,
+          watchers: data.watchers,
+          platformLink: data.platformLink
         });
       });
 

@@ -5,7 +5,7 @@ import PromptService from "../services/prompts.service";
 // TODO: retrieve watchers from an endpoint
 // within firebase and allow adding of watchers
 // through this or separate UI
-import { WATCHERS, TAGS } from "../consts/mock_data";
+import { WATCHERS, PLATFORMS } from "../consts/mock_data";
 
 // AntDesign components
 import { Form, Input, Select } from "antd";
@@ -14,8 +14,9 @@ const AddPrompt = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [watcher, setWatcher] = useState("")
-  const [tag, setTag] = useState("")
+  const [watchers, setWatchers] = useState(null)
+  const [platform, setPlatform] = useState("")
+  const [platformLink, setPlatformLink] = useState("")
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -29,9 +30,10 @@ const AddPrompt = () => {
     let data = {
       title: title,
       description: description,
-      published: false,
-      watcher: watcher,
-      tag: tag
+      active: false,
+      watchers: watchers,
+      platform: platform,
+      platformLink: platformLink
     };
 
     PromptService.create(data)
@@ -48,8 +50,9 @@ const AddPrompt = () => {
     setTitle("");
     setDescription("");
     setSubmitted(false);
-    setWatcher("")
-    setTag("")
+    setWatchers("")
+    setPlatform("")
+    setPlatformLink("")
   };
 
   return (
@@ -66,10 +69,9 @@ const AddPrompt = () => {
             </div>
           ) : (
             <Form
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 14 }}
-              layout="horizontal"
-              style={{ maxWidth: 600 }}
+              labelCol={{ span: 10 }}
+              wrapperCol={{ span: 30 }}
+              layout="vertical"
             >
               <Form.Item label="New Prompt">
                 <Input
@@ -90,17 +92,25 @@ const AddPrompt = () => {
               </Form.Item>
 
               <Form.Item label="Watchers">
-                <Select onChange={setWatcher}>
+                <Select mode='multiple'  onChange={setWatchers}>
                   { WATCHERS.map((watcher, i) => 
                       <Select.Option value={watcher.value} key={`watcher-${i}`}>{ watcher.label }</Select.Option>
                   )}
                 </Select>
               </Form.Item>
 
-              <Form.Item label='Tag'>
-                <Select onChange={setTag}>
-                { TAGS.map((tag, i) => 
-                      <Select.Option value={tag.value} key={`tag-${i}`}>{ tag.label }</Select.Option>
+              <Form.Item label='Platform'>
+                <Select onChange={setPlatform}>
+                { PLATFORMS.map((platform, i) => 
+                      <Select.Option  value={platform.value} key={`platform-${i}`}>{ platform.label }</Select.Option>
+                  )}
+                </Select>
+              </Form.Item>
+
+              <Form.Item label='Platform Link'>
+              <Select onChange={setPlatformLink}>
+                { PLATFORMS.map((platformLink, i) => 
+                      <Select.Option value={platformLink.value} key={`platformLink-${i}`}>{ platformLink.label }</Select.Option>
                   )}
                 </Select>
               </Form.Item>

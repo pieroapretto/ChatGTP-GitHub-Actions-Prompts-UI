@@ -1,4 +1,3 @@
-import firebase from 'firebase/app';
 import 'firebase/database';
 import fbDatabase from "../firebase";
 import { date_format_mmddyyyy } from '../utils/dates';
@@ -28,4 +27,6 @@ class PromptService {
   }
 }
 
-export default new PromptService();
+// Create instance before export [ best practice apparently? ]
+const Service = new PromptService()
+export default Service
