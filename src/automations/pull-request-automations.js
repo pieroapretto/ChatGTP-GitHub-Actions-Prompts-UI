@@ -1,8 +1,8 @@
 const axios = require('axios');
 const fs = require("fs");
 const util = require('util');
-const { chatGenerator } = require('../utils/open-ai-chat-generator');
 const PromptService = require('../services/prompt.service');
+const { chatGeneratorScript } = require('./chat-generator-script');
 
 // Sleep function to wait for a specified duration
 const sleep = util.promisify(setTimeout);
@@ -31,7 +31,7 @@ const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
   let comment_payload = null;
 
   try {
-    comment_payload = await chatGenerator(pr_diff, input);
+    comment_payload = await chatGeneratorScript(input, pr_diff);
   } catch (error) {
     console.error(`An error occurred with ${input} prompt`, error);
     return;

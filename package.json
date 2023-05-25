@@ -12,6 +12,7 @@
     "bootstrap": "^4.5.2",
     "dotenv": "^16.0.3",
     "firebase": "^7.17.2",
+    "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.7",
