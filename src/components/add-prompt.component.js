@@ -9,6 +9,7 @@ import { WATCHERS, PLATFORMS } from "../consts/mock_data";
 
 // AntDesign components
 import { Form, Input, Select } from "antd";
+import TextArea from "antd/es/input/TextArea";
 
 const AddPrompt = () => {
   const [title, setTitle] = useState("");
@@ -74,7 +75,7 @@ const AddPrompt = () => {
               layout="vertical"
             >
               <Form.Item label="New Prompt">
-                <Input
+                <TextArea
                   value={title}
                   onChange={onChangeTitle}
                   id="title"
