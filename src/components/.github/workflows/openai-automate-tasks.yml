@@ -1,0 +1,38 @@
+name: Automate tasks on pull request with ChatGPT
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.js'
+
+jobs:
+  evaluate_code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.19.2
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Get pull request diff
+      id: get_diff
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        git diff --unified=0 FETCH_HEAD..HEAD > pr_diff.txt
+
+    - name: Post comment using Node.js script
+      run: node pull-request-automations.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AI_KEY: ${{ secrets.AI_KEY }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.number }}

@@ -62,7 +62,8 @@ const AddPrompt = () => {
       active: false,
       watchers: watchers,
       platform: platform,
-      platformLink: platformLink
+      platformLink: platformLink,
+      context: promptContext
     };
 
     PromptService.create(data)
@@ -82,6 +83,8 @@ const AddPrompt = () => {
     setWatchers("")
     setPlatform("")
     setPlatformLink("")
+    setDemoContent("")
+    setPromptContext("")
   };
 
   return (
