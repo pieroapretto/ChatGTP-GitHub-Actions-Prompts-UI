@@ -6,5 +6,7 @@ export const WATCHERS = [
 
 export const PLATFORMS = [
   { key: 1, value: 'github', label: 'GitHub' },
-  { key: 2, value: 'jira', label: 'JIRA' }
+  { key: 2, value: 'jira', label: 'JIRA' },
+  { key: 3, value: 'prompt-ui', label: 'PROMPT UI'},
+  { key: 4, value: 'none', label: 'NONE' }
 ]

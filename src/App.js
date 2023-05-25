@@ -14,7 +14,7 @@ const App = () => {
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to={"/prompts-list"} className="nav-link">
-              See Prompts
+              Home
             </Link>
           </li>
           <li className="nav-item">

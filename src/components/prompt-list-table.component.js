@@ -6,14 +6,28 @@ import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 
 const deletePrompt = (key) => {
-    PromptService.delete(key)
-      .then(() => {
-        console.log('Deleted prompt with key: ' + key)
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  PromptService.delete(key)
+    .then(() => {
+      console.log('Deleted prompt with key: ' + key)
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+const getColor = (platformValue) => {
+  const platformColorMap = {
+    'github': 'black', // Colors for each platform pr watcher can be changed.
+    'jira': 'green',
+    'prompt-ui': 'darkorange',
+    'none': 'brown',
+    'engineering': 'geekblue',
+    'seo': 'green',
+    'core': 'purple',
   };
+
+  return platformColorMap[platformValue] || 'darkgray'; // Default color
+}
 
 const columns = [
   {
@@ -33,7 +47,7 @@ const columns = [
     render: (_, { watchers }) => (
       <>
         {watchers && watchers.map((watcher) => {
-          let color = watcher.length > 5 ? 'geekblue' : 'green';
+          const color = getColor(watcher);
           return (
             <Tag color={color} key={watcher}>
               {watcher.toUpperCase()}
@@ -49,7 +63,7 @@ const columns = [
     key: 'platform',  
     render: (_, { platform }) => {
       if (platform) {
-        const color = platform.length > 5 ? 'blue' : 'green'
+        const color = getColor(platform);
         return (
           <div style={{ color: color }}>
             {platform.toUpperCase()}

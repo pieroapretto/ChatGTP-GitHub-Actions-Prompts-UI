@@ -33,8 +33,6 @@ const PromptsList = () => {
           platformLink: data.platformLink
         });
       });
-
-      console.log(prompts)
   
       setPrompts(prompts);
     }

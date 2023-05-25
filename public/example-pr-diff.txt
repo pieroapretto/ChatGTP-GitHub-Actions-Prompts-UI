@@ -1,0 +1,42 @@
+diff --git a/src/domains/buying-mode/must-dos/test-drive-checklist/test-drive-checklist.scss b/src/domains/buying-mode/must-dos/test-drive-checklist/test-drive-checklist.scss
+index f828d8101..c8b7d06c6 100644
+--- a/src/domains/buying-mode/must-dos/test-drive-checklist/test-drive-checklist.scss
++++ b/src/domains/buying-mode/must-dos/test-drive-checklist/test-drive-checklist.scss
+@@ -22,4 +22,14 @@
+       }
+     }
+   }
++}
++
++// tablet, desktop styles
++@media (min-width: $MOBILE_MIN_WIDTH) {
++  .test-drive-checklist {
++    max-width: 1000px;
++    margin: 0 auto;
++    overflow-x: hidden;
++    position: relative;
++  }
+ }
+\ No newline at end of file
+diff --git a/src/domains/buying-mode/scss/buying-mode-container.scss b/src/domains/buying-mode/scss/buying-mode-container.scss
+index eec04e050..aaa66422b 100644
+--- a/src/domains/buying-mode/scss/buying-mode-container.scss
++++ b/src/domains/buying-mode/scss/buying-mode-container.scss
+@@ -73,4 +73,14 @@
+       color: $ml-orange;
+       text-decoration: none;
+     }
+-  }
+\ No newline at end of file
++  }
++
++// tablet, desktop styles
++@media (min-width: $MOBILE_MIN_WIDTH) {
++  .full-page-container.buying-mode-content-container {
++    max-width: 1000px;
++    margin: 0 auto;
++    overflow-x: hidden;
++    position: relative;
++  }
++}
+\ No newline at end of file
