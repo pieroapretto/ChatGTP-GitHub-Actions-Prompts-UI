@@ -78,6 +78,8 @@ const main = async () => {
     const snapshot = await ref.once('value');
     const prompts = await onDataChange(snapshot);
 
+    console.info('Number of prompts evaluting: ' + prompts.length);
+
     for (const { input } of prompts) {
       // Post the comment to the PR
       await postComment(input, token, owner, repo, pr_number, pr_diff);
