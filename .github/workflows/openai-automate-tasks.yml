@@ -36,7 +36,8 @@ jobs:
       run: node src/automations/pull-request-automations.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        AI_KEY: ${{ secrets.REACT_APP_DEMO_KEY }}
+        REACT_APP_DEMO_KEY: ${{ secrets.REACT_APP_DEMO_KEY }}
+        REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.REACT_APP_FIREBASE_DATABASE_URL }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
         FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
