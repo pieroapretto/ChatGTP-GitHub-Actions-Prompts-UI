@@ -23,9 +23,16 @@ const AddPrompt = () => {
   const [watchers, setWatchers] = useState(null)
   const [platform, setPlatform] = useState("")
   const [platformLink, setPlatformLink] = useState("")
+  
+  function appendDiffIfMissing(url) {
+    if (url &&url.includes('ChatGTP-GitHub-Actions-Prompts-UI') && !url.endsWith('.diff')) {
+        return null;
+    }
+    return url;
+}
 
   const getFileContent = async (url) => {
-    const path = url ?? process.env.PUBLIC_URL + '/example-pr-diff.txt';
+    const path = appendDiffIfMissing(url) ?? process.env.PUBLIC_URL + '/example-pr-diff.txt';
     try {
       const response = await axios.get(path);
       return response.data;
@@ -38,6 +45,10 @@ const AddPrompt = () => {
     setTitle(e.target.value);
   };
 
+  const onChangePlatformLink = (e) => {
+    setPlatformLink(e.target.value);
+  };
+
   const onChangePromptContext = (e) => {
     setPromptContext(e.target.value);
   };
@@ -47,8 +58,16 @@ const AddPrompt = () => {
   };
 
   const demoPrompt = async () => {
-    const linkContent = await getFileContent();
-    const demoContent = await chatGenerator(linkContent, title);
+    let content = "";
+
+    if (promptContext) {
+      content = promptContext;
+    }
+    else if(platformLink) {
+      content = await getFileContent(platformLink);
+    }
+
+    const demoContent = await chatGenerator(content, title);
 
     if(typeof demoContent === "string") {
       setDemoContent(demoContent);
@@ -82,6 +101,8 @@ const AddPrompt = () => {
     setWatchers("")
     setPlatform("")
     setPlatformLink("")
+    setDemoContent("")
+    setPromptContext("")
   };
 
   return (
@@ -131,11 +152,12 @@ const AddPrompt = () => {
 
               {(platform && platform !== "none") && (
                 <Form.Item label='Platform Link'>
-                  <Select onChange={setPlatformLink}>
-                    {PLATFORMS.map((platformLink, i) => 
-                      <Select.Option value={platformLink.value} key={`platformLink-${i}`}>{ platformLink.label }</Select.Option>
-                    )}
-                  </Select>
+                  <Input
+                    value={platformLink}
+                    onChange={onChangePlatformLink}
+                    id="platformLink"
+                    type="text"
+                  />
                 </Form.Item>
               )}
 
