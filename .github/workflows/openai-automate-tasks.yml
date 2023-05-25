@@ -30,7 +30,7 @@ jobs:
         git diff --unified=0 FETCH_HEAD..HEAD > pr_diff.txt
 
     - name: Post comment using Node.js script
-      run: node src\automations\pull-request-automations.js
+      run: node src/automations/pull-request-automations.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         AI_KEY: ${{ secrets.REACT_APP_DEMO_KEY }}
