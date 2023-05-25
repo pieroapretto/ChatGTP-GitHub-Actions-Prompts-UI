@@ -1,10 +1,12 @@
 export const WATCHERS = [
-  { value: 'engineering', label: 'Engineering' },
-  { value: 'seo', label: 'SEO Pod' },
-  { value: 'core', label: 'Core Pod' },
+  { key: 1, value: 'engineering', label: 'Engineering' },
+  { key: 2, value: 'seo', label: 'SEO Pod' },
+  { key: 3, value: 'core', label: 'Core Pod' },
 ]
 
-export const TAGS = [
-  { value: 'spacewhale', label: 'SpaceWhale' },
-  { value: 'jira', label: 'JIRA' }
+export const PLATFORMS = [
+  { key: 1, value: 'github', label: 'GitHub' },
+  { key: 2, value: 'jira', label: 'JIRA' },
+  { key: 3, value: 'prompt-ui', label: 'PROMPT UI'},
+  { key: 4, value: 'none', label: 'NONE' }
 ]

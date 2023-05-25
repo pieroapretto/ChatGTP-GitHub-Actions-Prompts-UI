@@ -24,14 +24,15 @@ const PromptsList = () => {
         let key = item.key;
         let data = item.val();
 
-        console.log(data);
-        
         prompts.push({
           key: key,
           title: data.title,
           description: data.description,
-          published: data.published,
-          timestamp: data.timestamp
+          active: data.active,
+          timestamp: data.timestamp,
+          platform: data.platform,
+          watchers: data.watchers,
+          platformLink: data.platformLink
         });
       });
   

@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown'
 // TODO: retrieve watchers from an endpoint
 // within firebase and allow adding of watchers
 // through this or separate UI
-import { WATCHERS, TAGS } from "../consts/mock_data";
+import { WATCHERS, PLATFORMS } from "../consts/mock_data";
 
 // AntDesign components
 import { Form, Input, Select } from "antd";
@@ -17,10 +17,12 @@ import { chatGenerator } from "../utils/open-ai-chat-generator";
 const AddPrompt = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [promptContext, setPromptContext] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [watcher, setWatcher] = useState("")
-  const [tag, setTag] = useState("")
   const [demoContent, setDemoContent] = useState('');
+  const [watchers, setWatchers] = useState(null)
+  const [platform, setPlatform] = useState("")
+  const [platformLink, setPlatformLink] = useState("")
 
   const getFileContent = async (url) => {
     const path = url ?? process.env.PUBLIC_URL + '/example-pr-diff.txt';
@@ -34,6 +36,10 @@ const AddPrompt = () => {
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
+  };
+
+  const onChangePromptContext = (e) => {
+    setPromptContext(e.target.value);
   };
 
   const onChangeDescription = (e) => {
@@ -53,9 +59,10 @@ const AddPrompt = () => {
     let data = {
       title: title,
       description: description,
-      published: false,
-      watcher: watcher,
-      tag: tag
+      active: false,
+      watchers: watchers,
+      platform: platform,
+      platformLink: platformLink
     };
 
     PromptService.create(data)
@@ -72,8 +79,9 @@ const AddPrompt = () => {
     setTitle("");
     setDescription("");
     setSubmitted(false);
-    setWatcher("")
-    setTag("")
+    setWatchers("")
+    setPlatform("")
+    setPlatformLink("")
   };
 
   return (
@@ -90,22 +98,21 @@ const AddPrompt = () => {
             </div>
           ) : (
             <Form
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 14 }}
-              layout="horizontal"
-              style={{ maxWidth: 600 }}
+              labelCol={{ span: 10 }}
+              wrapperCol={{ span: 30 }}
+              layout="vertical"
             >
               <Form.Item label="New Prompt">
                 <TextArea
                   value={title}
-                  rows="5"
+                  rows="3"
                   onChange={onChangeTitle}
                   id="title"
                   type="text"
                 />
               </Form.Item>
 
-              <Form.Item label="Description">
+              <Form.Item label="Comments">
                 <Input
                   value={description}
                   onChange={onChangeDescription}
@@ -114,28 +121,52 @@ const AddPrompt = () => {
                 />
               </Form.Item>
 
-              <Form.Item label="Watchers">
-                <Select onChange={setWatcher}>
-                  { WATCHERS.map((watcher, i) => 
-                      <Select.Option value={watcher.value} key={`watcher-${i}`}>{ watcher.label }</Select.Option>
+              <Form.Item label='Platform'>
+                <Select onChange={setPlatform}>
+                { PLATFORMS.map((platform, i) => 
+                      <Select.Option  value={platform.value} key={`platform-${i}`}>{ platform.label }</Select.Option>
                   )}
                 </Select>
               </Form.Item>
 
-              <Form.Item label='Tag'>
-                <Select onChange={setTag}>
-                { TAGS.map((tag, i) => 
-                      <Select.Option value={tag.value} key={`tag-${i}`}>{ tag.label }</Select.Option>
-                  )}
-                </Select>
-              </Form.Item>
+              {(platform && platform !== "none") && (
+                <Form.Item label='Platform Link'>
+                  <Select onChange={setPlatformLink}>
+                    {PLATFORMS.map((platformLink, i) => 
+                      <Select.Option value={platformLink.value} key={`platformLink-${i}`}>{ platformLink.label }</Select.Option>
+                    )}
+                  </Select>
+                </Form.Item>
+              )}
 
-              <br />
+              {(platform === "none") && (
+                <Form.Item label='Prompt context'>
+                  <TextArea
+                    value={title}
+                    rows="3"
+                    onChange={onChangePromptContext}
+                    id="context"
+                    type="text"
+                  />
+              </Form.Item>
+              )}
+
+              {platform && (
+                <Form.Item label="Watchers">
+                  <Select mode='multiple'  onChange={setWatchers}>
+                    { WATCHERS.map((watcher, i) => 
+                        <Select.Option value={watcher.value} key={`watcher-${i}`}>{ watcher.label }</Select.Option>
+                    )}
+                  </Select>
+                </Form.Item>
+              )}
+
+              <br/>
 
               <button onClick={savePrompt} className="btn btn-outline-success btn-md m-2">
                 Submit
               </button>
-              <button onClick={demoPrompt} className="btn btn-outline-secondary btn-md m-2">
+              <button onClick={demoPrompt} className="btn btn-outline-info btn-md m-2">
                 Demo
               </button>
             </Form>
@@ -145,7 +176,8 @@ const AddPrompt = () => {
       <div className="col-md-4">
         {demoContent && (
           <div>
-            <h4>Demo</h4>
+            <h2>Demo</h2>
+            <hr/>
             <ReactMarkdown>{demoContent}</ReactMarkdown>
           </div>
         )}
