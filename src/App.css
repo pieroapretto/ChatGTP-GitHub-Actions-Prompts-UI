@@ -13,12 +13,12 @@
   border-radius: 16px;
 }
 
-.submit-form {
+.submit-form, .edit-form {
   max-width: 100%;
   margin: auto;
 }
 
-.edit-form {
-  max-width: 300px;
+.submit-form form, .edit-form form {
+  max-width: 100%;
   margin: auto;
 }

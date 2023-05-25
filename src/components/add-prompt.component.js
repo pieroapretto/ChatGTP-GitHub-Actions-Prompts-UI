@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import PromptService from "../services/prompts.service";
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown'
 
 // Const
 // TODO: retrieve watchers from an endpoint
@@ -10,6 +12,7 @@ import { WATCHERS, TAGS } from "../consts/mock_data";
 // AntDesign components
 import { Form, Input, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { chatGenerator } from "../utils/open-ai-chat-generator";
 
 const AddPrompt = () => {
   const [title, setTitle] = useState("");
@@ -17,6 +20,17 @@ const AddPrompt = () => {
   const [submitted, setSubmitted] = useState(false);
   const [watcher, setWatcher] = useState("")
   const [tag, setTag] = useState("")
+  const [demoContent, setDemoContent] = useState('');
+
+  const getFileContent = async (url) => {
+    const path = url ?? process.env.PUBLIC_URL + '/example-pr-diff.txt';
+    try {
+      const response = await axios.get(path);
+      return response.data;
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+  }
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -24,6 +38,15 @@ const AddPrompt = () => {
 
   const onChangeDescription = (e) => {
     setDescription(e.target.value);
+  };
+
+  const demoPrompt = async () => {
+    const linkContent = await getFileContent();
+    const demoContent = await chatGenerator(linkContent, title);
+
+    if(typeof demoContent === "string") {
+      setDemoContent(demoContent);
+    }
   };
 
   const savePrompt = () => {
@@ -55,8 +78,8 @@ const AddPrompt = () => {
 
   return (
     <div className="row">
-      <h2>Add Prompt</h2>
-      <div className="col-md-12">
+      <div className="col-md-8">
+        <h2>Add Prompt</h2>
         <div className="submit-form">
           {submitted ? (
             <div>
@@ -75,6 +98,7 @@ const AddPrompt = () => {
               <Form.Item label="New Prompt">
                 <TextArea
                   value={title}
+                  rows="5"
                   onChange={onChangeTitle}
                   id="title"
                   type="text"
@@ -108,12 +132,23 @@ const AddPrompt = () => {
 
               <br />
 
-              <button onClick={savePrompt} className="btn btn-outline-success">
+              <button onClick={savePrompt} className="btn btn-outline-success btn-md m-2">
                 Submit
+              </button>
+              <button onClick={demoPrompt} className="btn btn-outline-secondary btn-md m-2">
+                Demo
               </button>
             </Form>
           )}
         </div>
+      </div>
+      <div className="col-md-4">
+        {demoContent && (
+          <div>
+            <h4>Demo</h4>
+            <ReactMarkdown>{demoContent}</ReactMarkdown>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -18,9 +18,14 @@ const PromptsList = () => {
     let prompts = [];
 
     if(items) {
+    
+      
       items.forEach((item) => {
         let key = item.key;
         let data = item.val();
+
+        console.log(data);
+        
         prompts.push({
           key: key,
           title: data.title,
@@ -29,8 +34,6 @@ const PromptsList = () => {
           timestamp: data.timestamp
         });
       });
-
-      console.log(prompts)
   
       setPrompts(prompts);
     }
