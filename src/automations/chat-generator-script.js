@@ -1,5 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
-const { generateMarkdown } = require('../utils/markdown-generation.js');
+const { generateMarkdownScript } = require("./generate-markdown-script.js");
 
 const configuration = new Configuration({
   apiKey: process.env.REACT_APP_DEMO_KEY
@@ -17,9 +17,9 @@ async function chatGeneratorScript(
       messages: [{ role: 'user', content: prompt + ': ' + context }]
     });
 
-    const pr_summary = res?.data?.choices[0]?.message?.content?.trim();
+    const response = res?.data?.choices[0]?.message?.content?.trim();
 
-    let markdown = generateMarkdown(pr_summary);
+    let markdown = generateMarkdownScript(response);
     return markdown;
 
   } catch (err) {
