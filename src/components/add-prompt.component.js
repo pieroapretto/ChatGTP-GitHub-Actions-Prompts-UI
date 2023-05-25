@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import PromptService from "../services/prompts.service";
 
+// Const
+// TODO: retrieve watchers from an endpoint
+// within firebase and allow adding of watchers
+// through this or separate UI
+import { WATCHERS, TAGS } from "../consts/mock_data";
+
+// AntDesign components
+import { Form, Input, Select } from "antd";
+
 const AddPrompt = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [watcher, setWatcher] = useState("")
+  const [tag, setTag] = useState("")
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -19,6 +30,8 @@ const AddPrompt = () => {
       title: title,
       description: description,
       published: false,
+      watcher: watcher,
+      tag: tag
     };
 
     PromptService.create(data)
@@ -35,6 +48,8 @@ const AddPrompt = () => {
     setTitle("");
     setDescription("");
     setSubmitted(false);
+    setWatcher("")
+    setTag("")
   };
 
   return (
@@ -50,42 +65,56 @@ const AddPrompt = () => {
               </button>
             </div>
           ) : (
-            <div>
-              <div className="form-group">
-                <label htmlFor="title">New Prompt</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  required
+            <Form
+              labelCol={{ span: 4 }}
+              wrapperCol={{ span: 14 }}
+              layout="horizontal"
+              style={{ maxWidth: 600 }}
+            >
+              <Form.Item label="New Prompt">
+                <Input
                   value={title}
                   onChange={onChangeTitle}
-                  name="title"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <input
+                  id="title"
                   type="text"
-                  className="form-control"
-                  id="description"
-                  required
+                />
+              </Form.Item>
+
+              <Form.Item label="Description">
+                <Input
                   value={description}
                   onChange={onChangeDescription}
-                  name="description"
+                  id="description"
+                  type="text"
                 />
-              </div>
-              <br/>
+              </Form.Item>
+
+              <Form.Item label="Watchers">
+                <Select onChange={setWatcher}>
+                  { WATCHERS.map((watcher, i) => 
+                      <Select.Option value={watcher.value} key={`watcher-${i}`}>{ watcher.label }</Select.Option>
+                  )}
+                </Select>
+              </Form.Item>
+
+              <Form.Item label='Tag'>
+                <Select onChange={setTag}>
+                { TAGS.map((tag, i) => 
+                      <Select.Option value={tag.value} key={`tag-${i}`}>{ tag.label }</Select.Option>
+                  )}
+                </Select>
+              </Form.Item>
+
+              <br />
+
               <button onClick={savePrompt} className="btn btn-outline-success">
                 Submit
               </button>
-            </div>
+            </Form>
           )}
         </div>
       </div>
     </div>
-    
   );
 };
 
