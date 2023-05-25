@@ -142,7 +142,7 @@ const AddPrompt = () => {
               {(platform === "none") && (
                 <Form.Item label='Prompt context'>
                   <TextArea
-                    value={title}
+                    value={promptContext}
                     rows="3"
                     onChange={onChangePromptContext}
                     id="context"

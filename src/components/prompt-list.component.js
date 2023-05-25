@@ -18,8 +18,6 @@ const PromptsList = () => {
     let prompts = [];
 
     if(items) {
-    
-      
       items.forEach((item) => {
         let key = item.key;
         let data = item.val();
