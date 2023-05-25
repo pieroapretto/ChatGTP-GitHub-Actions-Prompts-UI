@@ -12,6 +12,8 @@ async function chatGeneratorScript(
   context,
   ) {
   try {
+    console.info('Generating markdown script for...'+ '\nPrompt: ' + prompt)
+
     const res = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: prompt + ': ' + context }]

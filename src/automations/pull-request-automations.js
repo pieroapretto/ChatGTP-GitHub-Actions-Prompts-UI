@@ -21,6 +21,8 @@ const onDataChange = async (snapshot) => {
     const data = childSnapshot.val();
 
     if (data?.active && data?.platform === 'prompt-ui' && data?.title) {
+      console.info('Evaluting' + '\nPrompt: ' + data.title);
+
       prompts.push({
         key: key,
         input: data.title
