@@ -29,6 +29,9 @@ jobs:
         git fetch origin ${{ github.base_ref }}
         git diff --unified=0 FETCH_HEAD..HEAD > pr_diff.txt
 
+    - name: Set up Firebase service account key
+      run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > serviceAccountKey.json
+
     - name: Post comment using Node.js script
       run: node src/automations/pull-request-automations.js
       env:
@@ -36,3 +39,4 @@ jobs:
         AI_KEY: ${{ secrets.REACT_APP_DEMO_KEY }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         PR_NUMBER: ${{ github.event.number }}
+        FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}

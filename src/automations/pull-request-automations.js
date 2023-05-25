@@ -1,30 +1,34 @@
 const axios = require('axios');
 const fs = require("fs");
 const util = require('util');
-const PromptService = require('../services/prompt.service');
+const admin = require('firebase-admin');
 const { chatGeneratorScript } = require('./chat-generator-script');
+
+// Initialize Firebase Admin SDK
+admin.initializeApp({
+  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)),
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL
+});
 
 // Sleep function to wait for a specified duration
 const sleep = util.promisify(setTimeout);
+ 
+const onDataChange = async (snapshot) => {
+  const prompts = [];
 
-const onDataChange = async (items) => {
-  let prompts = [];
+  snapshot.forEach((childSnapshot) => {
+    const key = childSnapshot.key;
+    const data = childSnapshot.val();
 
-  if(items) {
-    items.forEach((item) => {
-      let key = item.key;
-      let data = item.val();
+    if (data?.active && data?.platform === 'prompt-ui' && data?.title) {
+      prompts.push({
+        key: key,
+        input: data.title
+      });
+    }
+  });
 
-      if(data?.active && data?.platform === 'prompt-ui' && data?.title) {
-        prompts.push({
-          key: key,
-          input: data.title
-        });
-      }
-    });
-
-    return prompts;
-  }
+  return prompts;
 };
 
 const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
@@ -55,7 +59,7 @@ const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
     console.error(`Failed to post Github comment: ${error.message}`);
     return error;
   }
-}
+};
 
 const main = async () => {
   // Read the content of the pr_diff.txt file
@@ -65,16 +69,25 @@ const main = async () => {
   const token = process.env.GITHUB_TOKEN;
   const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
   const pr_number = process.env.PR_NUMBER;
-  const prompts = await PromptService.getAll().on("value", onDataChange);
 
-  prompts.forEach(async ({ input }) => {
-    // Post the comment to the PR
-    await postComment(input, token, owner, repo, pr_number, pr_diff);
+  try {
+    const database = admin.database();
+    const ref = database.ref('/prompts');
+    const snapshot = await ref.once('value');
+    const prompts = await onDataChange(snapshot);
 
-    // Wait for a specified duration (e.g., 0.5 seconds)
-    await sleep(500);
-  });
-  
+    for (const { input } of prompts) {
+      // Post the comment to the PR
+      await postComment(input, token, owner, repo, pr_number, pr_diff);
+
+      // Wait for a specified duration (e.g., 0.5 seconds)
+      await sleep(500);
+    }
+  } catch (error) {
+    console.error('Failed to fetch prompts from the database:', error);
+  }
 };
 
-main().catch((err) => new Error(err));
+main().catch((err) => {
+  console.error('An unhandled error occurred:', err);
+});
