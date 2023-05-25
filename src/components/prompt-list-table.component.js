@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Space, Table, Tag } from 'antd';
 import PromptService from "../services/prompts.service";
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+
 
 const deletePrompt = (key) => {
     PromptService.delete(key)
@@ -25,21 +27,46 @@ const columns = [
     key: 'timestamp',
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
+    title: 'Watchers',
+    key: 'watchers',
+    dataIndex: 'watchers',
+    render: (_, { watchers }) => (
       <>
-        {tags && tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
+        {watchers && watchers.map((watcher) => {
+          let color = watcher.length > 5 ? 'geekblue' : 'green';
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag color={color} key={watcher}>
+              {watcher.toUpperCase()}
             </Tag>
           );
         })}
       </>
     ),
+  },
+  {
+    title: 'Platform',
+    dataIndex: 'platform',
+    key: 'platform',  
+    render: (_, { platform }) => {
+      if (platform) {
+        const color = platform.length > 5 ? 'blue' : 'green'
+        return (
+          <div style={{ color: color }}>
+            {platform.toUpperCase()}
+          </div>
+        )
+      }
+    }
+  },
+  {
+    title: 'Status',
+    dataIndex: 'active',
+    key: 'active',
+    align: 'center',
+    render: (_, { active }) => {
+      if (active) return <CheckCircleOutlined style={{ color: 'green' }} />
+      else return <CloseCircleOutlined style={{ color: 'red' }}/>
+    }
   },
   {
     title: 'Action',
@@ -53,6 +80,8 @@ const columns = [
   },
 ];
 
-const PromptsListTable = ({ data }) => <Table columns={columns} dataSource={data} />;
+const PromptsListTable = ({ data }) => {
+  return <Table columns={columns} dataSource={data} />;
+}
 
 export default PromptsListTable;
