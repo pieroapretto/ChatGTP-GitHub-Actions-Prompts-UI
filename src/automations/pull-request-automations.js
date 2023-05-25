@@ -20,8 +20,10 @@ const onDataChange = async (snapshot) => {
     const key = childSnapshot.key;
     const data = childSnapshot.val();
 
+    console.table('Evaluting prompt for automation' + '\nPrompt: ' + data.title);
+    console.table(data);
+
     if (data?.active && data?.platform === 'prompt-ui' && data?.title) {
-      console.info('Evaluting' + '\nPrompt: ' + data.title);
 
       prompts.push({
         key: key,
@@ -80,12 +82,14 @@ const main = async () => {
 
     console.info('Number of prompts evaluting: ' + prompts.length);
 
-    for (const { input } of prompts) {
-      // Post the comment to the PR
-      await postComment(input, token, owner, repo, pr_number, pr_diff);
-
-      // Wait for a specified duration (e.g., 0.5 seconds)
-      await sleep(500);
+    if(prompts.length !== 0) {
+      for (const { input } of prompts) {
+        // Post the comment to the PR
+        await postComment(input, token, owner, repo, pr_number, pr_diff);
+  
+        // Wait for a specified duration (e.g., 0.5 seconds)
+        await sleep(500);
+      }
     }
   } catch (error) {
     console.error('Failed to fetch prompts from the database:', error);
