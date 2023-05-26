@@ -20,9 +20,6 @@ const onDataChange = async (snapshot) => {
     const key = childSnapshot.key;
     const data = childSnapshot.val();
 
-    console.table('Evaluting prompt for automation' + '\nPrompt: ' + data.title);
-    console.table(data);
-
     if (data?.active && data?.platform === 'prompt-ui' && data?.title) {
 
       prompts.push({
@@ -82,6 +79,9 @@ const main = async () => {
 
     if(prompts.length !== 0) {
       for (const { input } of prompts) {
+
+        console.info('Evaluting prompt for automation' + '\nPrompt: ' + input);
+
         // Post the comment to the PR
         await postComment(input, token, owner, repo, pr_number, pr_diff);
   
