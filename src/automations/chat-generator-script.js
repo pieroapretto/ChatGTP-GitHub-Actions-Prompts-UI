@@ -12,7 +12,7 @@ async function chatGeneratorScript(
   context,
   ) {
   try {
-    console.info('Generating markdown script for...'+ '\nPrompt: ' + prompt)
+    console.info('Generating markdown script for prompt: ' + prompt)
 
     const res = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -27,7 +27,7 @@ async function chatGeneratorScript(
   } catch (err) {
     if (err?.response) {
       const { status = null, statusText = '' } = err.response;
-      console.error(`${status} - ${statusText}`);
+      console.error(`chatGeneratorScript: ${status} - ${statusText}. ` + '\nPrompt: ' + prompt);
       return err?.response;
     } else {
       console.error(err);
