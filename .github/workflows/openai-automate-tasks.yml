@@ -1,0 +1,43 @@
+name: Automate tasks on pull request with ChatGPT
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.js'
+
+jobs:
+  evaluate_code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.19.2
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Get pull request diff
+      id: get_diff
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        git diff --unified=0 FETCH_HEAD..HEAD > pr_diff.txt
+
+    - name: Set up Firebase service account key
+      run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > serviceAccountKey.json
+
+    - name: Post comment using Node.js script
+      run: node src/automations/pull-request-automations.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REACT_APP_DEMO_KEY: ${{ secrets.REACT_APP_DEMO_KEY }}
+        REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.REACT_APP_FIREBASE_DATABASE_URL }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.number }}
+        FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
