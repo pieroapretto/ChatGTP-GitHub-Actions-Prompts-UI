@@ -38,7 +38,8 @@ const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
   try {
     comment_payload = await chatGeneratorScript(input, pr_diff);
   } catch (error) {
-    throw new Error(`An error occurred with ${input} prompt`, error);
+    console.error(`An error occurred with ${input} prompt`, error);
+    return 1;
   }
 
   try {
@@ -56,7 +57,8 @@ const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
 
     console.log(`Github comment posted successfully: ${response.data.html_url}`);
   } catch (error) {
-    throw new Error(`Failed to post Github comment: ${error.message}`);
+    console.error(`Failed to post Github comment: ${error.message}`);
+    return 1;
   }
 };
 
@@ -99,5 +101,6 @@ const main = async () => {
 };
 
 main().catch((err) => {
-  throw new Error('An unhandled error occurred:', err);
+  console.error('An unhandled error occurred:', err);
+  return 1;
 });
