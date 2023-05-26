@@ -41,8 +41,7 @@ const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
   try {
     comment_payload = await chatGeneratorScript(input, pr_diff);
   } catch (error) {
-    console.error(`An error occurred with ${input} prompt`, error);
-    return;
+    throw new Error(`An error occurred with ${input} prompt`, error);
   }
 
   try {
@@ -60,8 +59,7 @@ const postComment = async (input, token, owner, repo, pr_number, pr_diff) => {
 
     console.log(`Github comment posted successfully: ${response.data.html_url}`);
   } catch (error) {
-    console.error(`Failed to post Github comment: ${error.message}`);
-    return error;
+    throw new Error(`Failed to post Github comment: ${error.message}`);
   }
 };
 
@@ -90,12 +88,14 @@ const main = async () => {
         // Wait for a specified duration (e.g., 0.5 seconds)
         await sleep(500);
       }
+    } else {
+      throw 'No prompts to evaluate..';
     }
   } catch (error) {
-    console.error('Failed to fetch prompts from the database:', error);
+    throw new Error('Failed to fetch prompts from the database:', error);
   }
 };
 
 main().catch((err) => {
-  console.error('An unhandled error occurred:', err);
+  throw new Error('An unhandled error occurred:', err);
 });
