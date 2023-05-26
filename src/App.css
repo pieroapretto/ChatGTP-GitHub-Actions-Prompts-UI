@@ -3,14 +3,8 @@
   margin: 25px auto;
 }
 
-.list {
-  text-align: left;
-  max-width: 750px;
-  margin: auto;
-}
-
-.list .list-group-item {
-  border-radius: 16px;
+.delete-btn {
+  color: darkred;
 }
 
 .submit-form {
@@ -21,4 +15,8 @@
 .edit-form {
   max-width: 400px;
   margin: auto;
+}
+
+.ant-tag {
+  margin: 0.25rem;
 }

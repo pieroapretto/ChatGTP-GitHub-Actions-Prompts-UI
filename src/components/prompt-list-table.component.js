@@ -87,8 +87,8 @@ const columns = [
     key: 'action',
     render: (_, { key }) => (
       <Space size="middle">
-        <Link to={`/edit-prompt/${key}`}><a >Edit</a></Link>
-        <a onClick={() => deletePrompt(key)}>Delete</a>
+        <Link to={`/edit-prompt/${key}`}><a className="edit-btn">Edit</a></Link>
+        <a className="delete-btn" onClick={() => deletePrompt(key)}>Delete</a>
       </Space>
     ),
   },
