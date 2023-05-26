@@ -91,8 +91,10 @@ const main = async () => {
     } else {
       throw 'No prompts to evaluate..';
     }
+    return 0;
   } catch (error) {
-    throw new Error('Failed to fetch prompts from the database:', error);
+    console.error('Failed to fetch prompts from the database:', error);
+    return 1;
   }
 };
 
