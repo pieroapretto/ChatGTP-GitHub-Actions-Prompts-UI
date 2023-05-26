@@ -26,7 +26,7 @@ const onDataChange = async (snapshot) => {
     if (data?.active && data?.platform === 'prompt-ui' && data?.title) {
 
       prompts.push({
-        key: key,
+        id: key,
         input: data.title
       });
     }
