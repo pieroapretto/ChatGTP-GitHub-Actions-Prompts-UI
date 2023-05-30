@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from "react";
 import PromptService from "../services/prompts.service";
 import { useParams } from "react-router-dom";
+import { Version3Client } from 'jira.js'
 
 import { WATCHERS, PLATFORMS } from "../consts/mock_data";
 
 import { Form, Input, Select } from "antd";
+
+// TODO - relocate to service
+const client = new Version3Client({
+  host: "https://incisent-labs.atlassian.net",
+  authentication: {
+    basic: {
+      email: '<Enter JIRA email>',
+      apiToken: '<Enter JIRA API Token>'
+    }
+  }
+})
+
+/**
+ * TODO: We will want to create a backend to handle calls w/ CORS involvment
+ * @param {*} ticketId 
+ */
+  const runJira = async () => {
+    const projects = await client.projects.getAllStatuses()
+    console.log(projects)
+  }
 
 const EditPrompt = (props) => {
   const [currentPrompt, setCurrentPrompt] = useState({
@@ -55,7 +76,7 @@ const EditPrompt = (props) => {
   };
 
   const onChangePlatformLink = (e) => {
-    const platformLink = e;
+    const platformLink = e.target.value;
     setCurrentPrompt((prevState) => ({
       ...prevState,
       platformLink: platformLink,
@@ -170,19 +191,12 @@ const EditPrompt = (props) => {
             </Form.Item>
 
             <Form.Item label="Platform Link">
-              <Select
+              <Input
                 value={currentPrompt.platformLink}
-                onChange={onChangePlatformLink}
-              >
-                {PLATFORMS.map((platformLink, i) => (
-                  <Select.Option
-                    value={platformLink.value}
-                    key={`platformLink-${i}`}
-                  >
-                    {platformLink.label}
-                  </Select.Option>
-                ))}
-              </Select>
+                onChange={onChangePlatformLink}/>
+                <button
+                  // onClick={() => runJira(currentPrompt.platformLink)}
+                  className="btn btn-outline-success btn-sm mt-2">Run GPT for JIRA</button>
             </Form.Item>
           </Form>
 
